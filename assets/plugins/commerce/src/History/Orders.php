@@ -66,7 +66,8 @@ class Orders extends \onetableDocLister
                         $tv[$product['product_id']] ?? []);
                     $product['original_title'] = $product['pagetitle'] ?? '';
                     $product['pagetitle'] = $product['title'];
-                    $total += (float) $product['price'] * $product['count'];
+                    $product['total'] = (float) $product['price'] * $product['count'];
+                    $total += $product['total'];
                     if ($product['product_id']) {
                         $count += $product['count'];
                     }
@@ -126,7 +127,8 @@ class Orders extends \onetableDocLister
                 /**
                  * @var $extPrepare prepare_DL_Extender
                  */
-                $extPrepare = $this->getExtender('prepare');
+                $extPrepare = $this->getExtender('prepare', true);
+
                 $this->skippedDocs = 0;
                 foreach ($this->_docs as $item) {
                     $this->renderTPL = $tpl;
@@ -209,7 +211,6 @@ class Orders extends \onetableDocLister
             if ($extPrepare) {
                 $item = $extPrepare->init($this, [
                     'data'      => $item,
-                    'type'      => 'product',
                     'nameParam' => 'prepareCartRow'
                 ]);
                 if ($item === false) {
@@ -235,7 +236,6 @@ class Orders extends \onetableDocLister
             if ($extPrepare) {
                 $item = $extPrepare->init($this, [
                     'data'      => $item,
-                    'type'      => 'subtotal',
                     'nameParam' => 'prepareSubtotalsRow'
                 ]);
                 if ($item === false) {

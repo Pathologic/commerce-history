@@ -73,9 +73,12 @@ class Orders extends \onetableDocLister
                     }
                 }
                 $items_price = $total;
-                foreach ($order['cart']['subtotals'] as $subtotal) {
-                    $total += $subtotal['price'];
+                if(isset($order['cart']['subtotals'])){
+                    foreach ($order['cart']['subtotals'] as $subtotal) {
+                        $total += $subtotal['price'];
+                    }
                 }
+
                 $order['cart']['count'] = $count;
                 $order['cart']['total'] = $total;
                 $order['cart']['items_price'] = $items_price;
@@ -232,20 +235,23 @@ class Orders extends \onetableDocLister
             $wrap .= $this->parseChunk($rowTpl, $item);
         }
 
-        foreach ($cart['subtotals'] as $item) {
-            if ($extPrepare) {
-                $item = $extPrepare->init($this, [
-                    'data'      => $item,
-                    'nameParam' => 'prepareSubtotalsRow'
-                ]);
-                if ($item === false) {
-                    $this->skippedDocs++;
-                    continue;
+        $subtotals = [];
+        if(isset($cart['subtotals'])){
+            foreach ($cart['subtotals'] as $item) {
+                if ($extPrepare) {
+                    $item = $extPrepare->init($this, [
+                        'data'      => $item,
+                        'nameParam' => 'prepareSubtotalsRow'
+                    ]);
+                    if ($item === false) {
+                        $this->skippedDocs++;
+                        continue;
+                    }
                 }
+                $subtotals .= $this->parseChunk($subtotalsRowTpl, $item);
             }
-            $subtotals .= $this->parseChunk($subtotalsRowTpl, $item);
+            $subtotals = $this->parseChunk($subtotalsTpl, ['wrap' => $subtotals]);
         }
-        $subtotals = $this->parseChunk($subtotalsTpl, ['wrap' => $subtotals]);
         if (!empty($wrap)) {
             $out = $this->parseChunk($wrapTpl, [
                 'dl.wrap'     => $wrap,

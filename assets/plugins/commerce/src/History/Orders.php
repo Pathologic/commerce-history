@@ -235,7 +235,7 @@ class Orders extends \onetableDocLister
             $wrap .= $this->parseChunk($rowTpl, $item);
         }
 
-        $subtotals = [];
+        $subtotals = '';
         if(isset($cart['subtotals'])){
             foreach ($cart['subtotals'] as $item) {
                 if ($extPrepare) {

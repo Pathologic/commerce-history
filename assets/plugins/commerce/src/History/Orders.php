@@ -39,9 +39,9 @@ class Orders extends \onetableDocLister
             $q = $this->dbQuery("SELECT * FROM {$this->getTable('commerce_order_products')} WHERE `order_id` IN ($ids)");
             $products = [];
             while ($row = $this->modx->db->getRow($q)) {
-                $row['options'] = json_decode($row['options'], true);
-                $row['meta'] = json_decode($row['meta'], true);
                 if ($row['product_id']) {
+                    $row['options'] = json_decode($row['options'], true) ?? [];
+                    $row['meta'] = json_decode($row['meta'], true) ?? [];
                     $orders[$row['order_id']]['cart']['products'][] = $row;
                 } else {
                     $orders[$row['order_id']]['cart']['subtotals'][] = $row;

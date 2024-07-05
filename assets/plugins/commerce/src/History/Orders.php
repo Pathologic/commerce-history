@@ -179,7 +179,7 @@ class Orders extends \onetableDocLister
                             continue;
                         }
                     }
-                    $item['cart'] = $this->renderCart($item['cart']);
+                    $item['cart']['products'] = $this->renderCart($item['cart']);
                     $tmp = $this->parseChunk($this->renderTPL, $item);
                     if ($this->getCFGDef('contentPlaceholder', 0) !== 0) {
                         $this->toPlaceholders(

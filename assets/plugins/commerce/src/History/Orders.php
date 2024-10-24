@@ -43,10 +43,11 @@ class Orders extends \onetableDocLister
                     $row['options'] = json_decode($row['options'], true) ?? [];
                     $row['meta'] = json_decode($row['meta'], true) ?? [];
                     $orders[$row['order_id']]['cart']['products'][] = $row;
+                    $products[] = $row['product_id'];
                 } else {
                     $orders[$row['order_id']]['cart']['subtotals'][] = $row;
                 }
-                $products[] = $row['product_id'];
+                
             }
         }
         if ($products) {
